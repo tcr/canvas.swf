@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>CreateImage 
+ &sect; Processing.js</title>
+
+    <!--[if IE]><script type="text/javascript" src="/FlashCanvas/bin/flashcanvas.js"></script><![endif]-->
+    <script type="text/javascript" src="processing.js"></script>
+    <script type="text/javascript" src="loader.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <script type="application/processing">
+PImage img;
+
+void setup() 
+{
+  size(200, 200);  
+  img = createImage(120, 120, RGB);
+  for(int i=0; i < img.pixels.length; i++) {
+    img.pixels[i] = color(0, 90, 102, i%img.width * 2); 
+  }
+}
+
+void draw() 
+{
+  background(204);
+  image(img, 33, 33);
+  image(img, mouseX-60, mouseY-60);
+}
+
+
+     </script>
+      <canvas width="200" height="200" style="border: 10px solid #444;"></canvas>
+    </div>
+  </body>
+</html>

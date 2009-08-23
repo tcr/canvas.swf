@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>LinearImage 
+ &sect; Processing.js</title>
+
+    <!--[if IE]><script type="text/javascript" src="/FlashCanvas/bin/flashcanvas.js"></script><![endif]-->
+    <script type="text/javascript" src="processing.js"></script>
+    <script type="text/javascript" src="loader.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <script type="application/processing">
+PImage a;
+boolean onetime = true;
+int[] aPixels = new int[200*200];
+int direction = 1;
+
+float signal;
+
+void setup() 
+{
+  size(33, 33);
+  stroke(255);
+  a = loadImage("cait.jpg");
+  for(int i=0; i<width*height; i++) {
+    aPixels[i] = a.pixels[i];
+  }
+  frameRate(30);
+}
+
+void draw() 
+{
+  if (signal > width-1 || signal < 0) { 
+    direction = direction * -1; 
+  }
+
+  if(mousePressed) {
+    signal = abs(mouseY%height);
+  } else {
+    signal += (0.3*direction);  
+  }
+  
+  
+  if(keyPressed) {
+    image(a, 0, 0);
+    /*
+    loadPixels();
+    for (int i=0; i<width*height; i++) { 
+      pixels[i] = aPixels[i];  
+    }
+    updatePixels();
+    */
+    line(0, signal, width, signal);
+  } else {
+    loadPixels();
+    for (int i=0; i<width*height; i++) { 
+      pixels[i] = aPixels[int((width*int(signal))+(i%width))];
+    }
+    updatePixels();
+  }
+  
+}
+
+
+     </script>
+      <canvas width="200" height="200" style="border: 10px solid #444;"></canvas>
+    </div>
+  </body>
+</html>

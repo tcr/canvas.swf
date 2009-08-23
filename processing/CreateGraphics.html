@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>CreateGraphics 
+ &sect; Processing.js</title>
+
+    <!--[if IE]><script type="text/javascript" src="/FlashCanvas/bin/flashcanvas.js"></script><![endif]-->
+    <script type="text/javascript" src="processing.js"></script>
+    <script type="text/javascript" src="loader.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <script type="application/processing">
+PGraphics pg;
+
+void setup() {
+  size(200, 200);
+  pg = createGraphics(80, 80, P3D);
+}
+
+void draw() {
+  fill(0, 12);
+  rect(0, 0, width, height);
+  fill(255);
+  noStroke();
+  ellipse(mouseX, mouseY, 60, 60);
+  
+  pg.beginDraw();
+  pg.background(102);
+  pg.noFill();
+  pg.stroke(255);
+  pg.ellipse(mouseX-60, mouseY-60, 60, 60);
+  pg.endDraw();
+  
+  image(pg, 60, 60); 
+}
+
+
+     </script>
+      <canvas width="200" height="200" style="border: 10px solid #444;"></canvas>
+    </div>
+  </body>
+</html>
