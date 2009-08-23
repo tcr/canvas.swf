@@ -1,1 +1,1 @@
-document.write('<script src="/flashcanvas/bin/flashcanvas.js"></script>');
+document.write('<script src="/FlashCanvas/bin/flashcanvas.js"></script>');
