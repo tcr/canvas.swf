@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html class="minimal">
+<title>Canvas test: context.arguments.missing</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="minimal.context.casesensitive.html" title="context.casesensitive">
+<link rel="next" href="minimal.context.arguments.extra.html" title="context.arguments.extra">
+<body>
+<p id="passtext">Pass</p>
+<p id="failtext">Fail</p>
+<!-- TODO: handle "script did not run" case -->
+<p class="output">These images should be identical:</p>
+<canvas id="c" class="output" width="100" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+try { var _thrown = false;
+  canvas.getContext();
+} catch (e) { if (e.code != DOMException.NOT_SUPPORTED_ERR) _fail("Failed assertion: expected exception of type NOT_SUPPORTED_ERR, got: "+e.message); _thrown = true; } finally { _assert(_thrown, "should throw exception of type NOT_SUPPORTED_ERR: canvas.getContext()"); }
+
+
+});
+</script>
+

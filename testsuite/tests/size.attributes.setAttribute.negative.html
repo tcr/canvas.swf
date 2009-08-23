@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<title>Canvas test: size.attributes.setAttribute.negative</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="size.attributes.setAttribute.zero.html" title="size.attributes.setAttribute.zero">
+<link rel="next" href="size.attributes.setAttribute.zerosuffix.html" title="size.attributes.setAttribute.zerosuffix">
+<body class="show_output">
+<p>
+ <a href="size.attributes.setAttribute.zero.html" accesskey="p" title="[p] size.attributes.setAttribute.zero">&lt;</a>
+ <a href="index.html">[index]</a>
+ <a href="size.attributes.setAttribute.zerosuffix.html" accesskey="n" title="[n] size.attributes.setAttribute.zerosuffix">&gt;</a>
+<h1><a href="index.size.html">size</a>.<a href="index.size.attributes.html">attributes</a>.<a href="index.size.attributes.setAttribute.html">setAttribute</a>.negative</h1>
+<p class="desc">Parsing of non-negative integers in setAttribute</p>
+<div class="refs">References:
+<ul>
+<li><a href="spec.html#testrefs.size.nonnegativeinteger">size.nonnegativeinteger</a>
+<li><a href="spec.html#testrefs.size.error">size.error</a>
+
+</ul>
+</div>
+
+<p class="output">Actual output:</p>
+<canvas id="c" class="output" width="50" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+<p class="output expectedtext">Expected output:<p><img src="size.attributes.setAttribute.negative.png" class="output expected" id="expected" alt="">
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+canvas.setAttribute('width', '-100');
+_assertEqual(canvas.width, 300, "canvas.width", "300");
+
+
+});
+</script>
+

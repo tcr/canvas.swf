@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html class="minimal">
+<title>Canvas test: size.attributes.parse.zero</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="minimal.size.attributes.parse.nonnumber.html" title="size.attributes.parse.nonnumber">
+<link rel="next" href="minimal.size.attributes.parse.negative.html" title="size.attributes.parse.negative">
+<body>
+<p id="passtext">Pass</p>
+<p id="failtext">Fail</p>
+<!-- TODO: handle "script did not run" case -->
+<p class="output">These images should be identical:</p>
+<canvas id="c" class="output" width="0" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+_assertEqual(canvas.width, 0, "canvas.width", "0");
+
+
+});
+</script>
+

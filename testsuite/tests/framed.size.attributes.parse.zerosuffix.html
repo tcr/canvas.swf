@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<title>Canvas test: size.attributes.parse.zerosuffix</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<body class="framed show_output">
+<h1>
+<a href="size.attributes.parse.zerosuffix.html" target="_parent">size.&#8203;attributes.&#8203;parse.&#8203;zerosuffix</a>
+</h1>
+<p><a href="#" id="show_output" onclick="document.body.className += ' show_output'; return false">[show output]</a>
+<p class="output">Actual output:</p>
+<canvas id="c" class="output" width="100.0" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+<p class="output expectedtext">Expected output:<p><img src="size.attributes.parse.zerosuffix.png" class="output expected" id="expected" alt="">
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+_assertEqual(canvas.width, 100, "canvas.width", "100");
+
+
+});
+</script>
+

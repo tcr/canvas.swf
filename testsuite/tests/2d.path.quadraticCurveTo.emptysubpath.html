@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<title>Canvas test: 2d.path.quadraticCurveTo.emptysubpath</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="2d.path.lineTo.nonfinite.html" title="2d.path.lineTo.nonfinite">
+<link rel="next" href="2d.path.quadraticCurveTo.basic.html" title="2d.path.quadraticCurveTo.basic">
+<body class="show_output">
+<p>
+ <a href="2d.path.lineTo.nonfinite.html" accesskey="p" title="[p] 2d.path.lineTo.nonfinite">&lt;</a>
+ <a href="index.html">[index]</a>
+ <a href="2d.path.quadraticCurveTo.basic.html" accesskey="n" title="[n] 2d.path.quadraticCurveTo.basic">&gt;</a>
+<h1><a href="index.2d.html">2d</a>.<a href="index.2d.path.html">path</a>.<a href="index.2d.path.quadraticCurveTo.html">quadraticCurveTo</a>.emptysubpath</h1>
+<p class="desc"></p>
+<div class="refs">References:
+<ul>
+<li><a href="spec.html#testrefs.2d.path.quadratic.empty">2d.path.quadratic.empty</a>
+
+</ul>
+</div>
+
+<p class="output">Actual output:</p>
+<canvas id="c" class="output" width="100" height="50" style="background: #0f0"><p class="fallback">FAIL (fallback content)</p></canvas>
+<p class="output expectedtext">Expected output:<p><img src="green-100x50.png" class="output expected" id="expected" alt="" style="background: #0f0">
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+ctx.strokeStyle = '#f00';
+ctx.lineWidth = 50;
+ctx.beginPath();
+ctx.quadraticCurveTo(0, 25, 0, 25);
+ctx.quadraticCurveTo(100, 25, 100, 25);
+ctx.stroke();
+_assertPixel(canvas, 50,25, 0,0,0,0, "50,25", "0,0,0,0");
+
+
+});
+</script>
+

@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<title>Canvas test: size.attributes.setAttribute.percentsuffix</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="size.attributes.setAttribute.badsuffix.html" title="size.attributes.setAttribute.badsuffix">
+<link rel="next" href="size.attributes.style.html" title="size.attributes.style">
+<body class="show_output">
+<p>
+ <a href="size.attributes.setAttribute.badsuffix.html" accesskey="p" title="[p] size.attributes.setAttribute.badsuffix">&lt;</a>
+ <a href="index.html">[index]</a>
+ <a href="size.attributes.style.html" accesskey="n" title="[n] size.attributes.style">&gt;</a>
+<h1><a href="index.size.html">size</a>.<a href="index.size.attributes.html">attributes</a>.<a href="index.size.attributes.setAttribute.html">setAttribute</a>.percentsuffix</h1>
+<p class="desc">Parsing of non-negative integers in setAttribute</p>
+<div class="refs">References:
+<ul>
+<li><a href="spec.html#testrefs.size.nonnegativeinteger">size.nonnegativeinteger</a>
+
+</ul>
+</div>
+
+<p class="output">Actual output:</p>
+<canvas id="c" class="output" width="50" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+<p class="output expectedtext">Expected output:<p><img src="size.attributes.setAttribute.percentsuffix.png" class="output expected" id="expected" alt="">
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+canvas.setAttribute('width', '100%');
+_assertEqual(canvas.width, 100, "canvas.width", "100");
+
+
+});
+</script>
+

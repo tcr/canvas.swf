@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html class="minimal">
+<title>Canvas test: size.attributes.style</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="minimal.size.attributes.setAttribute.percentsuffix.html" title="size.attributes.setAttribute.percentsuffix">
+<link rel="next" href="minimal.initial.colour.html" title="initial.colour">
+<body>
+<p id="passtext">Pass</p>
+<p id="failtext">Fail</p>
+<!-- TODO: handle "script did not run" case -->
+<p class="output">These images should be identical:</p>
+<canvas id="c" class="output" width="50" height="30" style="width: 100px; height: 50px"><p class="fallback">FAIL (fallback content)</p></canvas>
+
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+_assertEqual(canvas.width, 50, "canvas.width", "50");
+_assertEqual(canvas.height, 30, "canvas.height", "30");
+
+
+});
+</script>
+

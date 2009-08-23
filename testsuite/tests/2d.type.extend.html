@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<title>Canvas test: 2d.type.extend</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="2d.type.replace.html" title="2d.type.replace">
+<link rel="next" href="2d.getcontext.unique.html" title="2d.getcontext.unique">
+<body class="show_output">
+<p>
+ <a href="2d.type.replace.html" accesskey="p" title="[p] 2d.type.replace">&lt;</a>
+ <a href="index.html">[index]</a>
+ <a href="2d.getcontext.unique.html" accesskey="n" title="[n] 2d.getcontext.unique">&gt;</a>
+<h1><a href="index.2d.html">2d</a>.<a href="index.2d.type.html">type</a>.extend</h1>
+<p class="desc">Interface methods can be added</p>
+<div class="refs">References:
+<ul>
+<li><a href="spec.html#testrefs.context.2d.type">context.2d.type</a>
+
+</ul>
+</div>
+<p class="notes">Defined in "Language Bindings for DOM Specifications" (draft)
+<p class="output">Actual output:</p>
+<canvas id="c" class="output" width="100" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+<p class="output expectedtext">Expected output:<p><img src="green-100x50.png" class="output expected" id="expected" alt="">
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+window.CanvasRenderingContext2D.prototype.fillRectGreen = function (x, y, w, h)
+{
+    this.fillStyle = '#0f0';
+    this.fillRect(x, y, w, h);
+};
+ctx.fillStyle = '#f00';
+ctx.fillRectGreen(0, 0, 100, 50);
+_assertPixel(canvas, 50,25, 0,255,0,255, "50,25", "0,255,0,255");
+
+
+});
+</script>
+

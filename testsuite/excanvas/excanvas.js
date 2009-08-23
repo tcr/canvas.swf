@@ -1,0 +1,1 @@
+document.write('<script src="/flashcanvas/bin/flashcanvas.js"></script>');

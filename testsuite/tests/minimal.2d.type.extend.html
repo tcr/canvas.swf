@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html class="minimal">
+<title>Canvas test: 2d.type.extend</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="minimal.2d.type.replace.html" title="2d.type.replace">
+<link rel="next" href="minimal.2d.getcontext.unique.html" title="2d.getcontext.unique">
+<body>
+<p id="passtext">Pass</p>
+<p id="failtext">Fail</p>
+<!-- TODO: handle "script did not run" case -->
+<p class="output">These images should be identical:</p>
+<canvas id="c" class="output" width="100" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+<p class="output expectedtext">Expected output:<p><img src="green-100x50.png" class="output expected" id="expected" alt="">
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+window.CanvasRenderingContext2D.prototype.fillRectGreen = function (x, y, w, h)
+{
+    this.fillStyle = '#0f0';
+    this.fillRect(x, y, w, h);
+};
+ctx.fillStyle = '#f00';
+ctx.fillRectGreen(0, 0, 100, 50);
+_assertPixel(canvas, 50,25, 0,255,0,255, "50,25", "0,255,0,255");
+
+
+});
+</script>
+

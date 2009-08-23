@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<title>Canvas test: size.attributes.default</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="size.attributes.type.set.html" title="size.attributes.type.set">
+<link rel="next" href="size.attributes.reflect.1.html" title="size.attributes.reflect.1">
+<body class="show_output">
+<p>
+ <a href="size.attributes.type.set.html" accesskey="p" title="[p] size.attributes.type.set">&lt;</a>
+ <a href="index.html">[index]</a>
+ <a href="size.attributes.reflect.1.html" accesskey="n" title="[n] size.attributes.reflect.1">&gt;</a>
+<h1><a href="index.size.html">size</a>.<a href="index.size.attributes.html">attributes</a>.default</h1>
+<p class="desc">Default width/height</p>
+<div class="refs">References:
+<ul>
+<li><a href="spec.html#testrefs.size.default">size.default</a>
+<li><a href="spec.html#testrefs.size.missing">size.missing</a>
+
+</ul>
+</div>
+
+<p class="output">Actual output:</p>
+<canvas id="c" class="output" ><p class="fallback">FAIL (fallback content)</p></canvas>
+<p class="output expectedtext">Expected output:<p><img src="size.attributes.default.png" class="output expected" id="expected" alt="">
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+_assertEqual(canvas.width, 300, "canvas.width", "300");
+_assertEqual(canvas.height, 150, "canvas.height", "150");
+_assert(!canvas.hasAttribute('width'), "!canvas.hasAttribute('width')");
+_assert(!canvas.hasAttribute('height'), "!canvas.hasAttribute('height')");
+
+
+});
+</script>
+

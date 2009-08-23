@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<title>Canvas test: size.attributes.reflect.2</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="size.attributes.reflect.1.html" title="size.attributes.reflect.1">
+<link rel="next" href="size.attributes.removed.html" title="size.attributes.removed">
+<body class="show_output">
+<p>
+ <a href="size.attributes.reflect.1.html" accesskey="p" title="[p] size.attributes.reflect.1">&lt;</a>
+ <a href="index.html">[index]</a>
+ <a href="size.attributes.removed.html" accesskey="n" title="[n] size.attributes.removed">&gt;</a>
+<h1><a href="index.size.html">size</a>.<a href="index.size.attributes.html">attributes</a>.<a href="index.size.attributes.reflect.html">reflect</a>.2</h1>
+<p class="desc">Setting content attributes updates DOM and content attributes</p>
+<div class="refs">References:
+<ul>
+<li><a href="spec.html#testrefs.size.reflect">size.reflect</a>
+
+</ul>
+</div>
+
+<p class="output">Actual output:</p>
+<canvas id="c" class="output" width="100" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+<p class="output expectedtext">Expected output:<p><img src="size.attributes.reflect.2.png" class="output expected" id="expected" alt="">
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+canvas.setAttribute('width', '120');
+canvas.setAttribute('height', '60');
+_assertEqual(canvas.getAttribute('width'), '120', "canvas.getAttribute('width')", "'120'");
+_assertEqual(canvas.getAttribute('height'), '60', "canvas.getAttribute('height')", "'60'");
+_assertEqual(canvas.width, 120, "canvas.width", "120");
+_assertEqual(canvas.height, 60, "canvas.height", "60");
+
+
+});
+</script>
+

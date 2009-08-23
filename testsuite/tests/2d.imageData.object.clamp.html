@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<title>Canvas test: 2d.imageData.object.clamp</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="2d.imageData.object.string.html" title="2d.imageData.object.string">
+<link rel="next" href="2d.imageData.object.round.html" title="2d.imageData.object.round">
+<body class="show_output">
+<p>
+ <a href="2d.imageData.object.string.html" accesskey="p" title="[p] 2d.imageData.object.string">&lt;</a>
+ <a href="index.html">[index]</a>
+ <a href="2d.imageData.object.round.html" accesskey="n" title="[n] 2d.imageData.object.round">&gt;</a>
+<h1><a href="index.2d.html">2d</a>.<a href="index.2d.imageData.html">imageData</a>.<a href="index.2d.imageData.object.html">object</a>.clamp</h1>
+<p class="desc">ImageData.data clamps numbers to [0, 255]</p>
+<div class="refs">References:
+<ul>
+<li><a href="spec.html#testrefs.2d.imageData.set.clamp0">2d.imageData.set.clamp0</a>
+<li><a href="spec.html#testrefs.2d.imageData.set.clamp255">2d.imageData.set.clamp255</a>
+
+</ul>
+</div>
+
+<p class="output">Actual output:</p>
+<canvas id="c" class="output" width="100" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+var imgdata = ctx.getImageData(0, 0, 10, 10);
+
+imgdata.data[0] = 100;
+imgdata.data[0] = 300;
+_assertSame(imgdata.data[0], 255, "imgdata.data[\""+(0)+"\"]", "255");
+imgdata.data[0] = 100;
+imgdata.data[0] = -100;
+_assertSame(imgdata.data[0], 0, "imgdata.data[\""+(0)+"\"]", "0");
+
+imgdata.data[0] = 100;
+imgdata.data[0] = 200+Math.pow(2, 32);
+_assertSame(imgdata.data[0], 255, "imgdata.data[\""+(0)+"\"]", "255");
+imgdata.data[0] = 100;
+imgdata.data[0] = -200-Math.pow(2, 32);
+_assertSame(imgdata.data[0], 0, "imgdata.data[\""+(0)+"\"]", "0");
+
+imgdata.data[0] = 100;
+imgdata.data[0] = Math.pow(10, 39);
+_assertSame(imgdata.data[0], 255, "imgdata.data[\""+(0)+"\"]", "255");
+imgdata.data[0] = 100;
+imgdata.data[0] = -Math.pow(10, 39);
+_assertSame(imgdata.data[0], 0, "imgdata.data[\""+(0)+"\"]", "0");
+
+imgdata.data[0] = 100;
+imgdata.data[0] = -Infinity;
+_assertSame(imgdata.data[0], 0, "imgdata.data[\""+(0)+"\"]", "0");
+imgdata.data[0] = 100;
+imgdata.data[0] = Infinity;
+_assertSame(imgdata.data[0], 255, "imgdata.data[\""+(0)+"\"]", "255");
+
+
+});
+</script>
+

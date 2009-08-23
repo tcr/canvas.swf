@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<title>Canvas test: 2d.composite.clip2.source-over</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="2d.composite.clip.lighter.html" title="2d.composite.clip.lighter">
+<link rel="next" href="2d.composite.clip2.destination-over.html" title="2d.composite.clip2.destination-over">
+<body class="show_output">
+<p>
+ <a href="2d.composite.clip.lighter.html" accesskey="p" title="[p] 2d.composite.clip.lighter">&lt;</a>
+ <a href="index.html">[index]</a>
+ <a href="2d.composite.clip2.destination-over.html" accesskey="n" title="[n] 2d.composite.clip2.destination-over">&gt;</a>
+<h1><a href="index.2d.html">2d</a>.<a href="index.2d.composite.html">composite</a>.<a href="index.2d.composite.clip2.html">clip2</a>.source-over</h1>
+<p class="desc"></p>
+<div class="refs">References:
+<ul>
+<li><a href="spec.html#testrefs.2d.composite.source-over">2d.composite.source-over</a>
+
+</ul>
+</div>
+<p class="notes">Pixels not covered by the source object should be drawn as (0,0,0,0), not left unchanged.
+<p class="output">Actual output:</p>
+<canvas id="c" class="output" width="100" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+<p class="output expectedtext">Expected output:<p><img src="green-100x50.png" class="output expected" id="expected" alt="">
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+
+ctx.fillStyle = '#0f0';
+ctx.fillRect(0, 0, 100, 50);
+ctx.globalCompositeOperation = 'source-over';
+ctx.drawImage(document.getElementById('red.png'), 10, 10, 10, 10, 10, 20, 10, 10);
+_assertPixel(canvas, 50,25, 0,255,0,255, "50,25", "0,255,0,255");
+
+
+});
+</script>
+<img src="../images/red.png" id="red.png" class="resource">
+

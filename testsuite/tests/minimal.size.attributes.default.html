@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html class="minimal">
+<title>Canvas test: size.attributes.default</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="minimal.size.attributes.type.set.html" title="size.attributes.type.set">
+<link rel="next" href="minimal.size.attributes.reflect.1.html" title="size.attributes.reflect.1">
+<body>
+<p id="passtext">Pass</p>
+<p id="failtext">Fail</p>
+<!-- TODO: handle "script did not run" case -->
+<p class="output">These images should be identical:</p>
+<canvas id="c" class="output" ><p class="fallback">FAIL (fallback content)</p></canvas>
+<p class="output expectedtext">Expected output:<p><img src="size.attributes.default.png" class="output expected" id="expected" alt="">
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+_assertEqual(canvas.width, 300, "canvas.width", "300");
+_assertEqual(canvas.height, 150, "canvas.height", "150");
+_assert(!canvas.hasAttribute('width'), "!canvas.hasAttribute('width')");
+_assert(!canvas.hasAttribute('height'), "!canvas.hasAttribute('height')");
+
+
+});
+</script>
+

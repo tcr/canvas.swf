@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<title>Canvas test: 2d.gradient.object.type</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="2d.strokeStyle.default.html" title="2d.strokeStyle.default">
+<link rel="next" href="2d.gradient.object.return.html" title="2d.gradient.object.return">
+<body class="show_output">
+<p>
+ <a href="2d.strokeStyle.default.html" accesskey="p" title="[p] 2d.strokeStyle.default">&lt;</a>
+ <a href="index.html">[index]</a>
+ <a href="2d.gradient.object.return.html" accesskey="n" title="[n] 2d.gradient.object.return">&gt;</a>
+<h1><a href="index.2d.html">2d</a>.<a href="index.2d.gradient.html">gradient</a>.<a href="index.2d.gradient.object.html">object</a>.type</h1>
+<p class="desc">window.CanvasGradient exists and has the right properties</p>
+<div class="refs">References:
+<ul>
+
+</ul>
+</div>
+<p class="notes">Defined in "Language Bindings for DOM Specifications" (draft)
+<p class="output">Actual output:</p>
+<canvas id="c" class="output" width="100" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+_assertDifferent(window.CanvasGradient, undefined, "window.CanvasGradient", "undefined");
+_assertDifferent(window.CanvasGradient.prototype.addColorStop, undefined, "window.CanvasGradient.prototype.addColorStop", "undefined");
+
+
+});
+</script>
+

@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html class="minimal">
+<title>Canvas test: 2d.type.prototype</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="minimal.2d.type.delete.html" title="2d.type.delete">
+<link rel="next" href="minimal.2d.type.replace.html" title="2d.type.replace">
+<body>
+<p id="passtext">Pass</p>
+<p id="failtext">Fail</p>
+<!-- TODO: handle "script did not run" case -->
+<p class="output">These images should be identical:</p>
+<canvas id="c" class="output" width="100" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+_assert(window.CanvasRenderingContext2D.prototype, "window.CanvasRenderingContext2D.prototype");
+_assert(window.CanvasRenderingContext2D.prototype.fill, "window.CanvasRenderingContext2D.prototype.fill");
+window.CanvasRenderingContext2D.prototype = null;
+_assert(window.CanvasRenderingContext2D.prototype, "window.CanvasRenderingContext2D.prototype");
+delete window.CanvasRenderingContext2D.prototype;
+_assert(window.CanvasRenderingContext2D.prototype, "window.CanvasRenderingContext2D.prototype");
+window.CanvasRenderingContext2D.prototype.fill = 1;
+_assertSame(window.CanvasRenderingContext2D.prototype.fill, 1, "window.CanvasRenderingContext2D.prototype.fill", "1");
+delete window.CanvasRenderingContext2D.prototype.fill;
+_assertSame(window.CanvasRenderingContext2D.prototype.fill, undefined, "window.CanvasRenderingContext2D.prototype.fill", "undefined");
+
+
+});
+</script>
+

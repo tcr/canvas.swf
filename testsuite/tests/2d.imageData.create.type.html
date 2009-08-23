@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<title>Canvas test: 2d.imageData.create.type</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="2d.imageData.create.basic.html" title="2d.imageData.create.basic">
+<link rel="next" href="2d.imageData.create.initial.html" title="2d.imageData.create.initial">
+<body class="show_output">
+<p>
+ <a href="2d.imageData.create.basic.html" accesskey="p" title="[p] 2d.imageData.create.basic">&lt;</a>
+ <a href="index.html">[index]</a>
+ <a href="2d.imageData.create.initial.html" accesskey="n" title="[n] 2d.imageData.create.initial">&gt;</a>
+<h1><a href="index.2d.html">2d</a>.<a href="index.2d.imageData.html">imageData</a>.<a href="index.2d.imageData.create.html">create</a>.type</h1>
+<p class="desc">createImageData() returns an ImageData object containing a CanvasPixelArray object</p>
+<div class="refs">References:
+<ul>
+<li><a href="spec.html#testrefs.2d.imageData.create.object">2d.imageData.create.object</a>
+<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=433004">Bugzilla</a>
+</ul>
+</div>
+
+<p class="output">Actual output:</p>
+<canvas id="c" class="output" width="100" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+_assertDifferent(window.ImageData, undefined, "window.ImageData", "undefined");
+_assertDifferent(window.CanvasPixelArray, undefined, "window.CanvasPixelArray", "undefined");
+window.ImageData.prototype.thisImplementsImageData = true;
+window.CanvasPixelArray.prototype.thisImplementsCanvasPixelArray = true;
+var imgdata = ctx.createImageData(1, 1);
+_assert(imgdata.thisImplementsImageData, "imgdata.thisImplementsImageData");
+_assert(imgdata.data.thisImplementsCanvasPixelArray, "imgdata.data.thisImplementsCanvasPixelArray");
+
+
+});
+</script>
+

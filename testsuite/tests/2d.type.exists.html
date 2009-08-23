@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<title>Canvas test: 2d.type.exists</title>
+<!--[if IE]><script src="../excanvas/excanvas.js"></script><![endif]-->
+<script src="../tests.js"></script>
+<link rel="stylesheet" href="../tests.css">
+<link rel="prev" href="2d.getcontext.exists.html" title="2d.getcontext.exists">
+<link rel="next" href="2d.type.delete.html" title="2d.type.delete">
+<body class="show_output">
+<p>
+ <a href="2d.getcontext.exists.html" accesskey="p" title="[p] 2d.getcontext.exists">&lt;</a>
+ <a href="index.html">[index]</a>
+ <a href="2d.type.delete.html" accesskey="n" title="[n] 2d.type.delete">&gt;</a>
+<h1><a href="index.2d.html">2d</a>.<a href="index.2d.type.html">type</a>.exists</h1>
+<p class="desc">The 2D context interface is a property of 'window'</p>
+<div class="refs">References:
+<ul>
+<li><a href="spec.html#testrefs.context.2d.type">context.2d.type</a>
+
+</ul>
+</div>
+<p class="notes">Defined in "Language Bindings for DOM Specifications" (draft)
+<p class="output">Actual output:</p>
+<canvas id="c" class="output" width="100" height="50"><p class="fallback">FAIL (fallback content)</p></canvas>
+
+<ul id="d"></ul>
+<script>
+_addTest(function(canvas, ctx) {
+
+_assert(window.CanvasRenderingContext2D, "window.CanvasRenderingContext2D");
+
+
+});
+</script>
+

@@ -1,0 +1,963 @@
+# Copyright (c) 2008 Philip Taylor - MIT license - see LICENSE.txt
+
+- name: fallback.basic
+  desc: Fallback content is inserted into the DOM
+  testing:
+    - fallback
+  code: |
+    @assert canvas.childNodes.length == 1;
+
+- name: fallback.multiple
+  desc: Fallback content with multiple elements
+  testing:
+    - fallback
+  fallback: '<p class="fallback">FAIL</p><p class="fallback">FAIL</p>'
+  code: |
+    @assert canvas.childNodes.length == 2;
+
+- name: fallback.nested
+  desc: Fallback content containing another canvas (mostly testing parsers)
+  testing:
+    - fallback
+  fallback: '<canvas><p class="fallback">FAIL (fallback content)</p></canvas><p class="fallback">FAIL (fallback content)</p>'
+  code: |
+    @assert canvas.childNodes.length == 2;
+
+- name: type.name
+  desc: HTMLCanvasElement type and toString
+  testing:
+    - canvas.type
+  code: |
+    @assert Object.prototype.toString.call(canvas) === '[object HTMLCanvasElement]';
+
+- name: type.exists
+  desc: HTMLCanvasElement is a property of window
+  notes: &bindings Defined in "Language Bindings for DOM Specifications" (draft)
+  testing:
+    - canvas.type
+  code: |
+    @assert window.HTMLCanvasElement;
+
+- name: type.delete
+  desc: window.HTMLCanvasElement interface object is DontDelete
+  notes: *bindings
+  testing:
+    - canvas.type
+  code: |
+    delete window.HTMLCanvasElement;
+    @assert window.HTMLCanvasElement;
+
+- name: type.prototype
+  desc: window.HTMLCanvasElement has prototype, which is { ReadOnly, DontDelete }. prototype has getContext, which is not
+  notes: *bindings
+  testing:
+    - canvas.type
+  code: |
+    @assert window.HTMLCanvasElement.prototype;
+    @assert window.HTMLCanvasElement.prototype.getContext;
+    window.HTMLCanvasElement.prototype = null;
+    @assert window.HTMLCanvasElement.prototype;
+    delete window.HTMLCanvasElement.prototype;
+    @assert window.HTMLCanvasElement.prototype;
+    window.HTMLCanvasElement.prototype.getContext = 1;
+    @assert window.HTMLCanvasElement.prototype.getContext === 1;
+    delete window.HTMLCanvasElement.prototype.getContext;
+    @assert window.HTMLCanvasElement.prototype.getContext === undefined; @moz-todo
+
+- name: type.replace
+  desc: HTMLCanvasElement methods can be replaced, and the replacement methods used by canvases
+  notes: *bindings
+  testing:
+    - canvas.type
+  code: |
+    window.HTMLCanvasElement.prototype.getContext = function (name) { return 0; };
+    @assert canvas.getContext('2d') === 0;
+
+- name: type.extend
+  desc: HTMLCanvasElement methods can be added, and the new methods used by canvases
+  notes: *bindings
+  testing:
+    - canvas.type
+  code: |
+    window.HTMLCanvasElement.prototype.getZero = function () { return 0; };
+    @assert canvas.getZero() === 0;
+
+
+- name: size.attributes
+  desc: width/height DOM attributes and content attributes
+  testing:
+    - size.width
+    - size.height
+  canvas: width="120" height="60"
+  code: |
+    @assert canvas.width == 120;
+    @assert canvas.height == 60;
+    @assert canvas.getAttribute('width') == 120;
+    @assert canvas.getAttribute('height') == 60;
+  expected: size 120 60
+
+- name: size.attributes.type.get
+  desc: width/height DOM/content attributes - string vs number types
+  testing:
+    - size.width
+    - size.height
+  canvas: width="120" height="60"
+  code: |
+    @assert canvas.width === 120;
+    @assert canvas.height === 60;
+    @assert canvas.getAttribute('width') === '120';
+    @assert canvas.getAttribute('height') === '60';
+  expected: size 120 60
+
+- name: size.attributes.type.set
+  desc: Setting width/height DOM attributes
+  testing:
+    - size.width
+    - size.height
+  code: |
+    canvas.width = 120;
+    canvas.height = 60;
+    @assert canvas.width === 120;
+    @assert canvas.height === 60;
+  expected: size 120 60
+
+- name: size.attributes.type.set.negative
+  DISABLED: &undefined Seems to be undefined behaviour
+  code: |
+    canvas.width = -200;
+    canvas.height = -100;
+    @assert canvas.width === 300;
+    @assert canvas.height === 150;
+  expected: size 300 150
+
+- name: size.attributes.type.set.nonnumber
+  DISABLED: *undefined
+  code: |
+    canvas.width = 'foo';
+    canvas.height = 'foo';
+    @assert canvas.width === 300;
+    @assert canvas.height === 150;
+  expected: size 300 150
+
+- name: size.attributes.type.set.noninteger
+  DISABLED: *undefined
+  code: |
+    canvas.width = 200.9;
+    canvas.height = 100.9;
+    @assert canvas.width === 200;
+    @assert canvas.height === 100;
+  expected: size 200 100
+
+- name: size.attributes.type.set.string
+  DISABLED: *undefined
+  code: |
+    canvas.width = '200';
+    canvas.height = '100';
+    @assert canvas.width === 200;
+    @assert canvas.height === 100;
+  expected: size 200 100
+
+- name: size.attributes.type.set.badsuffix
+  DISABLED: *undefined
+  code: |
+    canvas.width = '200foo';
+    canvas.height = '100foo';
+    @assert canvas.width === 200;
+    @assert canvas.height === 100;
+  expected: size 200 100
+
+- name: size.attributes.default
+  desc: Default width/height
+  testing:
+    - size.default
+    - size.missing
+  canvas: ""
+  code: |
+    @assert canvas.width == 300;
+    @assert canvas.height == 150;
+    @assert !canvas.hasAttribute('width');
+    @assert !canvas.hasAttribute('height');
+  expected: size 300 150
+
+- name: size.attributes.reflect.1
+  desc: Setting DOM attributes updates DOM and content attributes
+  testing:
+    - size.reflect
+  code: |
+    canvas.width = 120;
+    canvas.height = 60;
+    @assert canvas.getAttribute('width') == '120';
+    @assert canvas.getAttribute('height') == '60';
+    @assert canvas.width == 120;
+    @assert canvas.height == 60;
+  expected: size 120 60
+
+- name: size.attributes.reflect.2
+  desc: Setting content attributes updates DOM and content attributes
+  testing:
+    - size.reflect
+  code: |
+    canvas.setAttribute('width', '120');
+    canvas.setAttribute('height', '60');
+    @assert canvas.getAttribute('width') == '120';
+    @assert canvas.getAttribute('height') == '60';
+    @assert canvas.width == 120;
+    @assert canvas.height == 60;
+  expected: size 120 60
+
+- name: size.attributes.removed
+  desc: Removing content attributes reverts to default size
+  testing:
+    - size.missing
+  canvas: width="120" height="60"
+  code: |
+    canvas.removeAttribute('width');
+    @assert canvas.width == 300;
+  expected: size 300 60
+
+- name: size.attributes.parse.whitespace
+  desc: Parsing of non-negative integers
+  testing:
+    - size.nonnegativeinteger
+  canvas: width="   100" height="50"
+  code: |
+    @assert canvas.width == 100;
+  expected: size 100 50
+
+- name: size.attributes.parse.nonnumber
+  desc: Parsing of non-negative integers
+  testing:
+    - size.nonnegativeinteger
+    - size.error
+  canvas: width="foo" height="50"
+  code: |
+    @assert canvas.width == 300;
+  expected: size 300 50
+
+- name: size.attributes.parse.zero
+  desc: Parsing of non-negative integers
+  testing:
+    - size.nonnegativeinteger
+  canvas: width="0" height="50"
+  code: |
+    @assert canvas.width == 0;
+#  expected: @size 0 50 # can't generate zero-sized PNG
+
+- name: size.attributes.parse.negative
+  desc: Parsing of non-negative integers
+  testing:
+    - size.nonnegativeinteger
+    - size.error
+  canvas: width="-100" height="50"
+  code: |
+    @assert canvas.width == 300; @moz-todo
+  expected: size 300 50
+
+- name: size.attributes.parse.zerosuffix
+  desc: Parsing of non-negative integers
+  testing:
+    - size.nonnegativeinteger
+  canvas: width="100.0" height="50"
+  code: |
+    @assert canvas.width == 100;
+  expected: size 100 50
+
+- name: size.attributes.parse.floatsuffix
+  desc: Parsing of non-negative integers
+  testing:
+    - size.nonnegativeinteger
+  canvas: width="100.9" height="50"
+  code: |
+    @assert canvas.width == 100;
+  expected: size 100 50
+
+- name: size.attributes.parse.badsuffix
+  desc: Parsing of non-negative integers
+  testing:
+    - size.nonnegativeinteger
+  canvas: width="100foo" height="50"
+  code: |
+    @assert canvas.width == 100; @moz-todo
+  expected: size 100 50
+
+- name: size.attributes.parse.percentsuffix
+  desc: Parsing of non-negative integers
+  testing:
+    - size.nonnegativeinteger
+  canvas: width="100%" height="50"
+  code: |
+    @assert canvas.width == 100;
+  expected: size 100 50
+
+- name: size.attributes.setAttribute.whitespace
+  desc: Parsing of non-negative integers in setAttribute
+  testing:
+    - size.nonnegativeinteger
+  canvas: width="50" height="50"
+  code: |
+    canvas.setAttribute('width', '   100');
+    @assert canvas.width == 100;
+  expected: size 100 50
+
+- name: size.attributes.setAttribute.nonnumber
+  desc: Parsing of non-negative integers in setAttribute
+  testing:
+    - size.nonnegativeinteger
+    - size.error
+  canvas: width="50" height="50"
+  code: |
+    canvas.setAttribute('width', 'foo');
+    @assert canvas.width == 300;
+  expected: size 300 50
+
+- name: size.attributes.setAttribute.zero
+  desc: Parsing of non-negative integers in setAttribute
+  testing:
+    - size.nonnegativeinteger
+  canvas: width="50" height="50"
+  code: |
+    canvas.setAttribute('width', '0');
+    @assert canvas.width == 0;
+#  expected: @size 0 50 # can't generate zero-sized PNG
+
+- name: size.attributes.setAttribute.negative
+  desc: Parsing of non-negative integers in setAttribute
+  testing:
+    - size.nonnegativeinteger
+    - size.error
+  canvas: width="50" height="50"
+  code: |
+    canvas.setAttribute('width', '-100');
+    @assert canvas.width == 300; @moz-todo
+  expected: size 300 50
+
+- name: size.attributes.setAttribute.zerosuffix
+  desc: Parsing of non-negative integers in setAttribute
+  testing:
+    - size.nonnegativeinteger
+  canvas: width="50" height="50"
+  code: |
+    canvas.setAttribute('width', '1');
+    canvas.setAttribute('width', '100.0');
+    @assert canvas.width == 100;
+  expected: size 100 50
+
+- name: size.attributes.setAttribute.floatsuffix
+  desc: Parsing of non-negative integers in setAttribute
+  testing:
+    - size.nonnegativeinteger
+  canvas: width="50" height="50"
+  code: |
+    canvas.setAttribute('width', '1');
+    canvas.setAttribute('width', '100.9');
+    @assert canvas.width == 100;
+  expected: size 100 50
+
+- name: size.attributes.setAttribute.badsuffix
+  desc: Parsing of non-negative integers in setAttribute
+  testing:
+    - size.nonnegativeinteger
+  canvas: width="50" height="50"
+  code: |
+    canvas.setAttribute('width', '100foo');
+    @assert canvas.width == 100; @moz-todo
+  expected: size 100 50
+
+- name: size.attributes.setAttribute.percentsuffix
+  desc: Parsing of non-negative integers in setAttribute
+  testing:
+    - size.nonnegativeinteger
+  canvas: width="50" height="50"
+  code: |
+    canvas.setAttribute('width', '100%');
+    @assert canvas.width == 100;
+  expected: size 100 50
+
+- name: size.attributes.style
+  desc: Canvas size is independent of CSS resizing
+  testing:
+    - size.css
+  canvas: 'width="50" height="30" style="width: 100px; height: 50px"'
+  code: |
+    @assert canvas.width == 50;
+    @assert canvas.height == 30;
+
+- name: size.large
+  DISABLED: |
+    "User agents may impose implementation-specific limits on otherwise unconstrained
+    inputs, e.g. to prevent denial of service attacks, to guard against running out of memory,
+    or to work around platform-specific limitations."
+  testing:
+    - size.width
+    - size.height
+  notes: Not sure how reasonable this is, but the spec doesn't say there's an upper limit on the size.
+  code: |
+    var n = 2147483647; // 2^31 - 1, which should be supported by any sensible definition of "long"
+    canvas.width = n;
+    canvas.height = n;
+    @assert canvas.width == n;
+    @assert canvas.height == n;
+#  expected: size 2147483647 2147483647 # not a good idea to generate the expected image in this case...
+
+- name: initial.colour
+  desc: Initial state is transparent black
+  testing:
+    - initial.colour
+  notes: |
+    Output should be transparent black (not transparent anything-else), but manual
+    verification can only confirm that it's transparent - it's not possible to make
+    the actual blackness visible.
+  code: |
+    @assert pixel 20,20 == 0,0,0,0;
+  expected: size 100 50 # transparent
+
+- name: initial.reset.different
+  desc: Changing size resets canvas to transparent black
+  testing:
+    - initial.reset
+  background: "#0f0"
+  code: |
+    ctx.fillStyle = '#f00';
+    ctx.fillRect(0, 0, 50, 50);
+    @assert pixel 20,20 == 255,0,0,255;
+    canvas.width = 50;
+    @assert pixel 20,20 == 0,0,0,0;
+  expected: size 50 50 # transparent
+
+- name: initial.reset.same
+  desc: Setting size (not changing the value) resets canvas to transparent black
+  testing:
+    - initial.reset
+  background: "#0f0"
+  code: |
+    canvas.width = 100;
+    ctx.fillStyle = '#f00';
+    ctx.fillRect(0, 0, 50, 50);
+    @assert pixel 20,20 == 255,0,0,255;
+    canvas.width = 100;
+    @assert pixel 20,20 == 0,0,0,0;
+  expected: size 100 50 # transparent
+
+- name: initial.reset.path
+  desc: Resetting the canvas state resets the current path
+  testing:
+    - initial.reset
+  background: "#0f0"
+  code: |
+    canvas.width = 100;
+    ctx.rect(0, 0, 100, 50);
+    canvas.width = 100;
+    ctx.fillStyle = '#f00';
+    ctx.fill();
+    @assert pixel 20,20 == 0,0,0,0;
+  expected: size 100 50 # transparent
+
+- name: initial.reset.clip
+  desc: Resetting the canvas state resets the current clip region
+  testing:
+    - initial.reset
+  background: "#f00"
+  code: |
+    canvas.width = 100;
+    ctx.rect(0, 0, 1, 1);
+    ctx.clip();
+    canvas.width = 100;
+    ctx.fillStyle = '#0f0';
+    ctx.fillRect(0, 0, 100, 50);
+    @assert pixel 20,20 == 0,255,0,255;
+  expected: green
+
+- name: initial.reset.transform
+  desc: Resetting the canvas state resets the current transformation matrix
+  testing:
+    - initial.reset
+  code: |
+    canvas.width = 100;
+    ctx.scale(0, 0);
+    canvas.width = 100;
+    ctx.fillStyle = '#0f0';
+    ctx.fillRect(0, 0, 100, 50);
+    @assert pixel 20,20 == 0,255,0,255;
+  expected: green
+
+- name: initial.reset.gradient
+  desc: Resetting the canvas state does not invalidate any existing gradients
+  code: |
+    canvas.width = 50;
+    var g = ctx.createLinearGradient(0, 0, 100, 0);
+    g.addColorStop(0, '#0f0');
+    g.addColorStop(1, '#0f0');
+    canvas.width = 100;
+    ctx.fillStyle = '#f00';
+    ctx.fillRect(0, 0, 100, 50);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 100, 50);
+    @assert pixel 50,25 == 0,255,0,255;
+  expected: green
+
+- name: initial.reset.pattern
+  desc: Resetting the canvas state does not invalidate any existing patterns
+  code: |
+    canvas.width = 50;
+    ctx.fillStyle = '#0f0';
+    ctx.fillRect(0, 0, 50, 50);
+    var p = ctx.createPattern(canvas, 'repeat-x');
+    canvas.width = 100;
+    ctx.fillStyle = '#f00';
+    ctx.fillRect(0, 0, 100, 50);
+    ctx.fillStyle = p;
+    ctx.fillRect(0, 0, 100, 50);
+    @assert pixel 50,25 == 0,255,0,255;
+  expected: green
+
+# See tests2d.yaml for initial.reset.2dstate
+
+
+- name: context.emptystring
+  desc: getContext with empty string returns null
+  testing:
+    - context.empty
+  mozilla: { throws, bug: 401788 }
+  code: |
+    @assert canvas.getContext("") === null;
+
+- name: context.unrecognised.badname
+  desc: getContext with unrecognised context name returns null
+  testing:
+    - context.unrecognised
+  mozilla: { throws, bug: 401788 }
+  code: |
+    @assert canvas.getContext('This is not an implemented context in any real browser') === null;
+
+- name: context.unrecognised.badsuffix
+  desc: Context name "2d" plus a suffix is unrecognised
+  testing:
+    - context.unrecognised
+  mozilla: { throws, bug: 401788 }
+  code: |
+    @assert canvas.getContext("2d#") === null;
+
+- name: context.unrecognised.nullsuffix
+  desc: Context name "2d" plus a "\0" suffix is unrecognised
+  testing:
+    - context.unrecognised
+  mozilla: { throws, bug: 401788 }
+  code: |
+    @assert canvas.getContext("2d\0") === null;
+
+- name: context.unrecognised.unicode
+  desc: Context name which kind of looks like "2d" is unrecognised
+  testing:
+    - context.unrecognised
+  mozilla: { throws, bug: 401788 }
+  code: |
+    @assert canvas.getContext("2\uFF44") === null; // Fullwidth Latin Small Letter D
+
+- name: context.casesensitive
+  desc: Context name "2D" is unrecognised; matching is case sensitive
+  testing:
+    - context.casesensitive
+  mozilla: { throws, bug: 401788 }
+  # It's possible that a context called "2D" could be defined, but that would be very
+  # confusing so I assume that nobody does that and that any match for "2D" is an
+  # incorrect case-insensitive comparison.
+  code: |
+    @assert canvas.getContext('2D') === null;
+
+- name: context.arguments.missing
+  # testing "common conformance requirements for APIs exposed to JavaScript"
+  code: |
+    @assert throws NOT_SUPPORTED_ERR canvas.getContext(); @moz-todo
+
+- name: context.arguments.extra
+  testing:
+    - context.extraarguments
+  code: |
+    @assert canvas.getContext('2d', 'foo') !== null;
+
+
+
+
+- name: toDataURL.default
+  desc: toDataURL with no arguments returns a PNG
+  testing:
+    - toDataURL.noarguments
+  code: |
+    var data = canvas.toDataURL();
+    @assert data =~ /^data:image\/png[;,]/;
+
+- name: toDataURL.png
+  desc: toDataURL with image/png returns a PNG
+  testing:
+    - toDataURL.png
+  code: |
+    var data = canvas.toDataURL('image/png');
+    @assert data =~ /^data:image\/png[;,]/;
+
+- name: toDataURL.unrecognised
+  desc: toDataURL with an unhandled type returns a PNG
+  mozilla: { throws, bug: 401795 }
+  testing:
+    - toDataURL.unrecognised
+  code: |
+    var data = canvas.toDataURL('image/example');
+    @assert data =~ /^data:image\/png[;,]/;
+
+- name: toDataURL.lowercase
+  desc: toDataURL type is case-sensitive
+  mozilla: { throws, bug: 401795 }
+  testing:
+    - toDataURL.lowercase
+  code: |
+    var data = canvas.toDataURL('ImAgE/PnG');
+    @assert data =~ /^data:image\/png[;,]/;
+
+- name: toDataURL.arguments.1
+  desc: toDataURL ignores extra arguments
+  notes: &fragile This will be invalid if the spec changes to support multiple arguments for toDataURL.
+  mozilla: { throws, bug: 401795 }
+  testing:
+    - toDataURL.arguments
+  code: |
+    var data = canvas.toDataURL('image/png', 'another argument that should not raise an exception');
+    @assert data =~ /^data:image\/png[;,]/;
+
+- name: toDataURL.arguments.2
+  desc: toDataURL ignores extra arguments
+  notes: *fragile
+  mozilla: { throws, bug: 401795 }
+  testing:
+    - toDataURL.arguments
+  code: |
+    var data = canvas.toDataURL('image/png', 'another argument that should not raise an exception', 'and another');
+    @assert data =~ /^data:image\/png[;,]/;
+
+- name: toDataURL.arguments.3
+  desc: toDataURL ignores extra arguments
+  notes: *fragile
+  mozilla: { throws, bug: 401795 }
+  testing:
+    - toDataURL.arguments
+  code: |
+    // More arguments that should not raise exceptions
+    var data = canvas.toDataURL('image/png', null, null, null);
+    @assert data =~ /^data:image\/png[;,]/;
+
+- name: toDataURL.nocontext
+  desc: toDataURL works before any context has been got
+  testing:
+    - toDataURL.noarguments
+  code: |
+    var canvas2 = document.createElement('canvas');
+    var data = canvas2.toDataURL();
+    @assert data =~ /^data:image\/png[;,]/;
+
+- name: toDataURL.zerosize
+  desc: toDataURL on zero-size canvas returns 'data:,'
+  testing:
+    - toDataURL.zerosize
+  canvas: width="0" height="0"
+  code: |
+    var data = canvas.toDataURL();
+    @assert data === 'data:,'; @moz-todo
+
+- name: toDataURL.large1
+  DISABLED: just testing implementation limits, and tends to crash
+  canvas: width="30000" height="1"
+  code: |
+    var data = canvas.toDataURL();
+    @assert data =~ /^data:image\/png[;,]/;
+
+- name: toDataURL.large2
+  DISABLED: just testing implementation limits, and tends to crash
+  canvas: width="32767" height="1"
+  code: |
+    var data = canvas.toDataURL();
+    @assert data =~ /^data:image\/png[;,]/;
+
+- name: toDataURL.large3
+  DISABLED: just testing implementation limits, and tends to crash
+  canvas: width="32768" height="1"
+  code: |
+    var data = canvas.toDataURL();
+    @assert data =~ /^data:image\/png[;,]/;
+
+- name: toDataURL.primarycolours
+  desc: toDataURL handles simple colours correctly
+  testing:
+    - toDataURL.noarguments
+  code: |
+    ctx.fillStyle = '#ff0';
+    ctx.fillRect(0, 0, 25, 40);
+    ctx.fillStyle = '#0ff';
+    ctx.fillRect(25, 0, 50, 40);
+    ctx.fillStyle = '#00f';
+    ctx.fillRect(75, 0, 25, 40);
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 40, 100, 10);
+    var data = canvas.toDataURL();
+    ctx.fillStyle = '#f00';
+    ctx.fillRect(0, 0, 100, 50);
+    var img = new Image();
+    deferTest();
+    img.onload = wrapFunction(function ()
+    {
+        ctx.drawImage(img, 0, 0);
+        @moz-UniversalBrowserRead;
+        @assert pixel 12,20 == 255,255,0,255;
+        @assert pixel 50,20 == 0,255,255,255;
+        @assert pixel 87,20 == 0,0,255,255;
+        @assert pixel 50,45 == 255,255,255,255;
+    });
+    img.src = data;
+  expected: |
+    size 100 50
+    cr.set_source_rgb(1, 1, 0)
+    cr.rectangle(0, 0, 25, 40)
+    cr.fill()
+    cr.set_source_rgb(0, 1, 1)
+    cr.rectangle(25, 0, 50, 40)
+    cr.fill()
+    cr.set_source_rgb(0, 0, 1)
+    cr.rectangle(75, 0, 25, 40)
+    cr.fill()
+    cr.set_source_rgb(1, 1, 1)
+    cr.rectangle(0, 40, 100, 10)
+    cr.fill()
+
+- name: toDataURL.complexcolours
+  desc: toDataURL handles non-primary and non-solid colours correctly
+  testing:
+    - toDataURL.noarguments
+  code: |
+    // (These values are chosen to survive relatively alright through being premultiplied)
+    ctx.fillStyle = 'rgba(1, 3, 254, 1)';
+    ctx.fillRect(0, 0, 25, 25);
+    ctx.fillStyle = 'rgba(8, 252, 248, 0.75)';
+    ctx.fillRect(25, 0, 25, 25);
+    ctx.fillStyle = 'rgba(6, 10, 250, 0.502)';
+    ctx.fillRect(50, 0, 25, 25);
+    ctx.fillStyle = 'rgba(12, 16, 244, 0.25)';
+    ctx.fillRect(75, 0, 25, 25);
+    var img = new Image();
+    deferTest();
+    img.onload = wrapFunction(function ()
+    {
+        ctx.drawImage(img, 0, 25);
+        // (The alpha values do not really survive float->int conversion, so just
+        // do approximate comparisons)
+        @moz-UniversalBrowserRead;
+        @assert pixel 12,40 == 1,3,254,255;
+        @assert pixel 37,40 ==~ 8,252,248,191 +/- 2;
+        @assert pixel 62,40 ==~ 6,10,250,127 +/- 4;
+        @assert pixel 87,40 ==~ 12,16,244,63 +/- 8;
+    });
+    img.src = canvas.toDataURL();
+  expected: |
+    size 100 50
+    cr.set_source_rgba(1/255., 3/255., 254/255., 1)
+    cr.rectangle(0, 0, 25, 50)
+    cr.fill()
+    cr.set_source_rgba(8/255., 252/255., 248/255., 191/255.)
+    cr.rectangle(25, 0, 25, 50)
+    cr.fill()
+    cr.set_source_rgba(6/255., 10/255., 250/255., 127/255.)
+    cr.rectangle(50, 0, 25, 50)
+    cr.fill()
+    cr.set_source_rgba(12/255., 16/255., 244/255., 63/255.)
+    cr.rectangle(75, 0, 25, 50)
+    cr.fill()
+
+
+
+# TODO: work out what security exception should be thrown
+# TODO: test same-origin vs same-host
+
+- name: security.drawImage.image
+  desc: drawImage of different-origin image makes the canvas origin-unclean
+  mozilla: { disabled } # relies on external resources
+  testing:
+    - security.drawImage.image
+    - security.toDataURL
+    - security.getImageData
+  images:
+    - http://excors.googlepages.com/yellow.png
+  code: |
+    ctx.drawImage(document.getElementById('yellow.png'), 0, 0);
+    @assert throws canvas.toDataURL();
+    @assert throws ctx.getImageData(0, 0, 1, 1);
+
+- name: security.drawImage.canvas
+  desc: drawImage of unclean canvas makes the canvas origin-unclean
+  mozilla: { disabled } # relies on external resources
+  testing:
+    - security.drawImage.canvas
+  images:
+    - http://excors.googlepages.com/yellow.png
+  code: |
+    var canvas2 = document.createElement('canvas');
+    canvas2.width = 100;
+    canvas2.height = 50;
+    var ctx2 = canvas2.getContext('2d');
+    ctx2.drawImage(document.getElementById('yellow.png'), 0, 0);
+    ctx.drawImage(canvas2, 0, 0);
+    @assert throws canvas.toDataURL();
+    @assert throws ctx.getImageData(0, 0, 1, 1);
+
+- name: security.pattern.create
+  desc: Creating an unclean pattern does not make the canvas origin-unclean
+  mozilla: { disabled } # relies on external resources
+  testing:
+    - security.start
+  images:
+    - http://excors.googlepages.com/yellow.png
+  code: |
+    var p = ctx.createPattern(document.getElementById('yellow.png'), 'repeat');
+    canvas.toDataURL();
+    ctx.getImageData(0, 0, 1, 1);
+    @assert true; // okay if there was no exception
+
+- name: security.pattern.cross
+  desc: Using an unclean pattern makes the target canvas origin-unclean, not the pattern canvas
+  mozilla: { disabled } # relies on external resources
+  testing:
+    - security.start
+  images:
+    - http://excors.googlepages.com/yellow.png
+  code: |
+    var canvas2 = document.createElement('canvas');
+    canvas2.width = 100;
+    canvas2.height = 50;
+    var ctx2 = canvas2.getContext('2d');
+    var p = ctx2.createPattern(document.getElementById('yellow.png'), 'repeat');
+    ctx.fillStyle = p;
+    ctx.fillRect(0, 0, 100, 50);
+    @assert throws canvas.toDataURL();
+    @assert throws ctx.getImageData(0, 0, 1, 1);
+    canvas2.toDataURL();
+    ctx2.getImageData(0, 0, 1, 1);
+
+- name: security.pattern.canvas.timing
+  desc: Pattern safety depends on whether the source was origin-clean, not on whether it still is clean
+  notes: Disagrees with spec on "is" vs "was"
+  mozilla: { disabled } # relies on external resources
+  testing:
+    - security.start
+    - security.fillStyle.canvas
+  images:
+    - http://excors.googlepages.com/yellow.png
+  code: |
+    var canvas2 = document.createElement('canvas');
+    canvas2.width = 100;
+    canvas2.height = 50;
+    var ctx2 = canvas2.getContext('2d');
+    ctx2.fillStyle = '#0f0';
+    ctx2.fillRect(0, 0, 100, 50);
+    var p = ctx.createPattern(canvas2, 'repeat');
+    ctx2.drawImage(document.getElementById('yellow.png'), 0, 0); // make canvas2 origin-unclean
+    ctx.fillStyle = p;
+    ctx.fillRect(0, 0, 100, 50);
+    canvas.toDataURL();
+    ctx.getImageData(0, 0, 1, 1);
+    @assert true; // okay if there was no exception
+
+- name: security.pattern.image.fillStyle
+  desc: Setting fillStyle to a pattern of a different-origin image makes the canvas origin-unclean
+  mozilla: { disabled } # relies on external resources
+  testing:
+    - security.fillStyle.image
+  images:
+    - http://excors.googlepages.com/yellow.png
+  code: |
+    var p = ctx.createPattern(document.getElementById('yellow.png'), 'repeat');
+    ctx.fillStyle = p;
+    ctx.fillStyle = 'red';
+    @assert throws canvas.toDataURL();
+    @assert throws ctx.getImageData(0, 0, 1, 1);
+
+- name: security.pattern.canvas.fillStyle
+  desc: Setting fillStyle to a pattern of an unclean canvas makes the canvas origin-unclean
+  mozilla: { bug: 354127, disabled } # relies on external resources
+  testing:
+    - security.fillStyle.canvas
+  images:
+    - http://excors.googlepages.com/yellow.png
+  code: |
+    var canvas2 = document.createElement('canvas');
+    canvas2.width = 100;
+    canvas2.height = 50;
+    var ctx2 = canvas2.getContext('2d');
+    ctx2.drawImage(document.getElementById('yellow.png'), 0, 0);
+    var p = ctx.createPattern(canvas2, 'repeat');
+    ctx.fillStyle = p;
+    ctx.fillStyle = 'red';
+    @assert throws canvas.toDataURL();
+    @assert throws ctx.getImageData(0, 0, 1, 1);
+
+- name: security.pattern.image.strokeStyle
+  desc: Setting strokeStyle to a pattern of a different-origin image makes the canvas origin-unclean
+  mozilla: { disabled } # relies on external resources
+  testing:
+    - security.strokeStyle.image
+  images:
+    - http://excors.googlepages.com/yellow.png
+  code: |
+    var p = ctx.createPattern(document.getElementById('yellow.png'), 'repeat');
+    ctx.strokeStyle = p;
+    ctx.strokeStyle = 'red';
+    @assert throws canvas.toDataURL();
+    @assert throws ctx.getImageData(0, 0, 1, 1);
+
+- name: security.pattern.canvas.strokeStyle
+  desc: Setting strokeStyle to a pattern of an unclean canvas makes the canvas origin-unclean
+  mozilla: { bug: 354127, disabled } # relies on external resources
+  testing:
+    - security.strokeStyle.canvas
+  images:
+    - http://excors.googlepages.com/yellow.png
+  code: |
+    var canvas2 = document.createElement('canvas');
+    canvas2.width = 100;
+    canvas2.height = 50;
+    var ctx2 = canvas2.getContext('2d');
+    ctx2.drawImage(document.getElementById('yellow.png'), 0, 0);
+    var p = ctx.createPattern(canvas2, 'repeat');
+    ctx.strokeStyle = p;
+    ctx.strokeStyle = 'red';
+    @assert throws canvas.toDataURL();
+    @assert throws ctx.getImageData(0, 0, 1, 1);
+
+- name: security.dataURI
+  desc: 'data: URIs do not count as different-origin, and do not taint the canvas'
+  mozilla: { disabled, bug: 417836 } # can't do "todo" so just disable it
+  code: |
+    ctx.fillStyle = '#0f0';
+    ctx.fillRect(0, 0, 100, 50);
+    var data = canvas.toDataURL();
+    ctx.fillStyle = '#f00';
+    ctx.fillRect(0, 0, 100, 50);
+    var img = new Image();
+    deferTest();
+    img.onload = wrapFunction(function ()
+    {
+        ctx.drawImage(img, 0, 0);
+        canvas.toDataURL(); // should be permitted
+        @assert pixel 50,25 == 0,255,0,255;
+    });
+    img.src = data;
+  expected: green
+
+- name: security.reset
+  desc: Resetting the canvas state does not reset the origin-clean flag
+  mozilla: { disabled } # relies on external resources
+  testing:
+    - initial.reset
+  images:
+    - http://excors.googlepages.com/yellow.png
+  code: |
+    canvas.width = 50;
+    ctx.drawImage(document.getElementById('yellow.png'), 0, 0);
+    @assert throws canvas.toDataURL();
+    canvas.width = 100;
+    @assert throws canvas.toDataURL();
+
