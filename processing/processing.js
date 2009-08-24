@@ -1850,13 +1850,27 @@ function buildProcessing( curElement ){
       }
     }
     
+	function ObjectPosition(obj) {
+		var curleft = obj.clientLeft;
+		var curtop = obj.clientTop;
+		if (obj.offsetParent) {
+			do {
+				curleft += obj.offsetLeft;
+				curtop += obj.offsetTop;
+			} while (obj = obj.offsetParent);
+		}
+		return {left: curleft, top: curtop};
+	}
+    
     attach( curElement, "mousemove", function(e) {
-      var scrollX = window.scrollX != null ? window.scrollX : window.pageXOffset || document.documentElement.scrollLeft;
-      var scrollY = window.scrollY != null ? window.scrollY : window.pageYOffset || document.documentElement.scrollTop;            
       p.pmouseX = p.mouseX;
       p.pmouseY = p.mouseY;
-      p.mouseX = e.clientX - curElement.offsetLeft + scrollX;
-      p.mouseY = e.clientY - curElement.offsetTop + scrollY;
+
+      var scrollX = window.scrollX != null ? window.scrollX : window.pageXOffset || document.documentElement.scrollLeft;
+      var scrollY = window.scrollY != null ? window.scrollY : window.pageYOffset || document.documentElement.scrollTop;            
+      var pos = ObjectPosition(curElement);
+      p.mouseX = e.clientX + scrollX - pos.left;
+      p.mouseY = e.clientY + scrollY - pos.top;
 
       if ( p.mouseMoved ) {
         p.mouseMoved();
