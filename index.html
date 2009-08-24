@@ -1,1 +1,113 @@
-My Github Page
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>FlashCanvas</title>
+    <style>
+    
+body {
+width: 40em;
+margin: 0 auto;
+font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
+}
+    
+    </style>
+  </head>
+  
+  <body>
+    <h1>FlashCanvas</h1>
+    <p>An implementation of the HTML 5 Canvas API in Flash for Internet Explorer.</p>
+    <hr>
+    <h2>Usage</h2>
+    <p>Copy the files <code>flashcanvas.js</code> and <code>flashcanvas.swf</code> in the same folder somewhere on your server. Include the file <code>flashcanvas.js</code> in your source as follows:</p>
+    <blockquote><pre>&lt;!--[if IE]&gt;&lt;script type="text/javascript"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;src="/FlashCanvas/bin/flashcanvas.js"&gt;&lt;/script&gt;&lt;![endif]--&gt;
+</pre></blockquote>
+    <p>That's it! All <code>&lt;canvas&gt;</code> elements in markup or generated using <code>document.createElement('canvas')</code> will automatically be bound to the Canvas API, allowing you to make seamless, cross-browser code using the canvas element.</p>
+    <h3>Caveats</h3>
+    <ul>
+      <li>Canvas elements in markup will not be bound until the <code>onreadystatechange</code> event for the <code>document</code> fires for <code>COMPLETE</code>.</li>
+      <li>Canvas elements generated using <code>innerHTML</code> or other raw HTML-writing methods will not be bound.</li>
+    </ul>
+    <h3>TODO</h3>
+    <ul>
+      <li>Evaluate and pass the majority of tests in the <a href="#tests-testsuite">Test Suite</a> and the <a href="#tests-processing">Processing.js examples</a>.</li>
+      <li>Support means of <code>drawImage</code>, drawing other canvas elements onto the existing canvas, video/audio, &amp;c.</li>
+      <li>Support Flash 10 (for increased speed).</li>
+      <li>Many other things.</li>
+    </ul>
+    <h3>Source</h3>
+    <p>The up-to-date source can be found in the <a href="http://github.com/timcameronryan/FlashCanvas/tree/master">GitHub repository</a>.</p>
+    <hr>
+    
+    <h2>Tests</h2>
+    
+    <h3 id="tests-testsuite">Test Suite</h3>
+    <p><strong><a href="testsuite/tests/">Canvas Test Suite</a></strong>. Provided by <a href="mailto:excors@gmail.com">Philip Taylor</a>.</p>
+    
+    <h3 id="tests-excanvas">Excanvas</h3>
+    <p>Various examples leveraged from the ExplorerCanvas project.</p>
+    <ul>
+      <li><a href="excanvas/example1.html">Moving points</a></li>
+      <li><a href="excanvas/example1_stress.html">Moving points (stress test)</a></li>
+      <li><a href="excanvas/example2.html">Rotating Cube</a></li>
+      <li><a href="excanvas/example3.html">Rotating Image</a></li>
+    </ul>
+    
+    <h3 id="tests-processing">Processing.js</h3>
+    <p>Various examples using the <a href="http://processingjs.com/">Processing.js</a> engine.</p>
+    <h4>Basics</h4>
+    <ul>
+      <li><a href="processing/CreateGraphics.html">CreateGraphics</a></li>
+      <li><a href="processing/Recursion.html">Recursion</a></li>
+      <li><a href="processing/Distance2D.html">Distance2D</a></li>
+      <li><a href="processing/Arctangent.html">Arctangent</a></li>
+      <li><a href="processing/Random.html">Random</a></li>
+      <li><a href="processing/NoiseWave.html">NoiseWave</a></li>
+      <li><a href="processing/Pointillism.html">Pointillism</a></li>
+      <li><a href="processing/CreateImage.html">CreateImage</a></li>
+      <li><a href="processing/Mouse2D.html">Mouse2D</a></li>
+      <li><a href="processing/BezierEllipse.html">BezierEllipse</a></li>
+      <li><a href="processing/StoringInput.html">StoringInput</a></li>
+      <li><a href="processing/MouseFunctions.html">MouseFunctions</a></li>
+      <li><a href="processing/KeyboardFunctions.html">KeyboardFunctions</a></li>
+      <li><a href="processing/Clock.html">Clock</a></li>
+    </ul>
+
+    <h4>Topics</h4>
+    <ul>
+      <li><a href="processing/Handles.html">Handles</a></li>
+      <li><a href="processing/Wolfram.html">Wolfram</a></li>
+      <li><a href="processing/Conway.html">Conway</a></li>
+      <li><a href="processing/Animator.html">Animator</a></li>
+      <li><a href="processing/Pattern.html">Pattern</a></li>
+      <li><a href="processing/PixelArray.html">PixelArray</a></li>
+      <li><a href="processing/Brightness.html">Brightness</a></li>
+      <li><a href="processing/LinearImage.html">LinearImage</a></li>
+      <li><a href="processing/Scrollbar.html">Scrollbar</a></li>
+      <li><a href="processing/Histogram.html">Histogram</a></li>
+      <li><a href="processing/BouncyBubbles.html">BouncyBubbles</a></li>
+      <li><a href="processing/Collision.html">Collision</a></li>
+      <li><a href="processing/Reflection1.html">Reflection1</a></li>
+      <li><a href="processing/Reflection2.html">Reflection2</a></li>
+      <li><a href="processing/Spring.html">Spring</a></li>
+      <li><a href="processing/Springs.html">Springs</a></li>
+      <li><a href="processing/Reach3.html">Reach3</a></li>
+      <li><a href="processing/SimpleParticleSystem.html">SimpleParticleSystem</a></li>
+      <li><a href="processing/Flocking.html">Flocking</a></li>
+      <li><a href="processing/Koch.html">Koch</a></li>
+      <li><a href="processing/Mandelbrot.html">Mandelbrot</a></li>
+      <li><a href="processing/Tree.html">Tree</a></li>
+      <li><a href="processing/SoftBody.html">SoftBody</a></li>
+    </ul>
+	
+    <h4>Special</h4>
+    <ul>
+      <li><a href="processing/MoltenBar.html">MoltenBar</a></li>
+      <li><a href="processing/Substrate.html">Substrate</a></li>
+      <li><a href="processing/Snake.html">Snake</a></li>
+    </ul>
+    
+    <h3 id="tests-text">Text Demo</h3>
+    <p><strong><a href="text/textposition.html">Canvas Text Demo</a></strong>. Example leveraged from the Canvas-Text project.</p>
+  </body>
+</html>
