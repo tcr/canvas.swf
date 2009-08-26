@@ -3,68 +3,167 @@
 <html>
   <head>
     <title>FlashCanvas</title>
+    
+    <!--[if IE]><script type="text/javascript" src="bin/flashcanvas.js"></script><![endif]-->
     <style>
     
 body {
-width: 40em;
+font-size: 76%;
+}
+    
+#content {
+font-size: 1.2em;
+width: 600px;
 margin: 0 auto;
 font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
 }
+
+#summary {
+font-size: 1.1em;
+}
+
+.column {
+float: left;
+width: 47%;
+margin-left: 2%;
+margin-top: 0;
+margin-bottom: 0;
+}
+
+.testgroup {
+margin: 1em 0;
+border: 1px solid #ccc;
+padding: 0 1em;
+overflow: auto;
+}
+
+hr { clear: both; }
+
+#header-canvas { margin-left: -100px; }
+#summary h2 { margin-top: 0; }
+
+html, body, #content, #header { margin-top: 0; padding-top: 0; }
+
+h2 { margin-top: 2em; }
     
     </style>
+    
+    <script>
+    
+window.onload = function () {
+	// get header canvas
+	var canvas = document.getElementById('header-canvas'), ctx;
+	// check that we support the canvas API
+	if (!canvas.getContext || !(ctx = canvas.getContext('2d')))
+		return false;
+
+	// hide header
+	var header = document.getElementById('header');
+	header.style.position = 'absolute';
+	header.style.left = '-1000px';
+	
+	// background
+	var x = 100;
+	for (var i = 0; i < 13; i++, x += 600/12)
+	{
+		ctx.fillStyle = 'rgba(' + Math.round(Math.random()*255) + ', ' + Math.round(Math.random()*255) + ', ' + Math.round(Math.random()*255) + ', 0.1)';
+		ctx.beginPath();
+		ctx.arc(x, Math.random() * 100 - 50, Math.random() * 100, 0, Math.PI*0.1, true);
+		ctx.fill();
+		ctx.closePath();
+	}
+	
+	// draw on header image
+	var x = 125, y = 90;
+	ctx.fillStyle = 'rgba(70, 50, 50, 0.2)';
+	ctx.font = '50px "Lucida Sans Unicode", "Lucida Grande", sans-serif bold';
+	ctx.save();
+	ctx.translate(x, y);
+	ctx.fillText('FlashCanvas', 0, 0);
+	ctx.fillStyle = '#545';
+	ctx.translate(5, -5);
+	ctx.fillText('FlashCanvas', 0, 0);
+	ctx.restore();
+	
+	var x = 465, y = 60;
+	ctx.fillStyle = '#323';
+	ctx.font = '16px "Lucida Sans Unicode", "Lucida Grande", sans-serif';
+	ctx.translate(x, y);
+	ctx.fillText('An implementation of the', 0, 0);
+	ctx.translate(0, 20);
+	ctx.fillText('HTML 5 Canvas API in Flash', 0, 0);
+	ctx.translate(0, 20);
+	ctx.fillText('for Internet Explorer.', 0, 0);
+}
+    
+    </script>
   </head>
   
   <body>
-    <h1>FlashCanvas</h1>
-    <p>An implementation of the HTML 5 Canvas API in Flash for Internet Explorer.</p>
-    <hr>
+    <div id="content">
+    
+    <div id="header">
+      <h1>FlashCanvas</h1>
+      <p>An implementation of the HTML 5 Canvas API in Flash for Internet Explorer.</p>
+    </div><canvas width="800" height="150" id="header-canvas"></canvas>
+    
+    <div id="summary">
     <h2>Usage</h2>
     <p>Copy the files <code>flashcanvas.js</code> and <code>flashcanvas.swf</code> in the same folder somewhere on your server. Include the file <code>flashcanvas.js</code> in your source as follows:</p>
-    <blockquote><pre>&lt;!--[if IE]&gt;&lt;script type="text/javascript"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;src="/FlashCanvas/bin/flashcanvas.js"&gt;&lt;/script&gt;&lt;![endif]--&gt;
+    <blockquote><pre>&lt;!--[if IE]&gt;&lt;script type="text/javascript"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;src="<em>/path/to/</em>flashcanvas.js"&gt;&lt;/script&gt;&lt;![endif]--&gt;
 </pre></blockquote>
-    <p>That's it! All <code>&lt;canvas&gt;</code> elements in markup or generated using <code>document.createElement('canvas')</code> will automatically be bound to the Canvas API, allowing you to make seamless, cross-browser code using the canvas element.</p>
-    <h3>Caveats</h3>
-    <ul>
-      <li>Canvas elements in markup will not be bound until the <code>onreadystatechange</code> event for the <code>document</code> fires for <code>COMPLETE</code>.</li>
-      <li>Canvas elements generated using <code>innerHTML</code> or other raw HTML-writing methods will not be bound.</li>
-    </ul>
-    <h3>TODO</h3>
-    <ul>
-      <li>Evaluate and pass the majority of tests in the <a href="#tests-testsuite">Test Suite</a> and the <a href="#tests-processing">Processing.js examples</a>.</li>
-      <li>Support means of <code>drawImage</code>, drawing other canvas elements onto the existing canvas, video/audio, &amp;c.</li>
-      <li>Support Flash 10 (for increased speed).</li>
-      <li>Many other things.</li>
-    </ul>
+    <p>That's it! All <code>&lt;canvas&gt;</code> elements in markup or generated using <code>document.createElement('canvas')</code> will be interactive using the Canvas API, allowing you to make seamless, cross-browser graphics using the canvas element.</p>
+    </div>
+    
+    <h3>Download</h3>
+    <p>The current release can be downloaded <a href="http://github.com/timcameronryan/FlashCanvas/downloads">here</a>.</p>
     <h3>Source</h3>
-    <p>The up-to-date source can be found in the <a href="http://github.com/timcameronryan/FlashCanvas/tree/master">GitHub repository</a>.</p>
-    <hr>
+    <p>The source repository is located at <a href="http://github.com/timcameronryan/FlashCanvas/tree/master">GitHub</a>.</p>
     
-    <h2>Tests</h2>
+    <h2>How to get involved</h2>
+    <p>FlashCanvas is a work in progress. You can help in any of the following ways: implementing more parts of the <a href="http://dev.w3.org/html5/spec/the-canvas-element.html">Canvas API</a>, helping report <a href="http://github.com/timcameronryan/FlashCanvas/issues">any issues or bugs</a>, or using FlashCanvas in your own projects. For more information, contact <a href="dev@tim-ryan.com">Tim Ryan</a>.</p>
+    <p>FlashCanvas is authored using the <a href="http://www.haxe.org/">haXe programming language</a> and JavaScript.</p>
     
+    <h2>Examples</h2>
+    <p>The following examples and tests are HTML 5 canvas examples taken from elsewhere in the web. Using FlashCanvas, they should work almost identically across all modern browsers.</p>
+    
+    <div class="testgroup">
     <h3 id="tests-testsuite">Test Suite</h3>
     <p><strong><a href="testsuite/tests/">Canvas Test Suite</a></strong>. Provided by <a href="mailto:excors@gmail.com">Philip Taylor</a>.</p>
+    </div>
     
+    <div class="testgroup">
     <h3 id="tests-excanvas">Excanvas</h3>
-    <p>Various examples leveraged from the ExplorerCanvas project.</p>
+    <p>Various examples courtesy the <a href="http://excanvas.sourceforge.net/">ExplorerCanvas</a> project.</p>
     <ul>
       <li><a href="excanvas/example1.html">Moving points</a></li>
       <li><a href="excanvas/example1_stress.html">Moving points (stress test)</a></li>
       <li><a href="excanvas/example2.html">Rotating Cube</a></li>
+<!--
       <li><a href="excanvas/example3.html">Rotating Image</a></li>
+-->
     </ul>
+    </div>
     
+    <div class="testgroup">
     <h3 id="tests-processing">Processing.js</h3>
-    <p>Various examples using the <a href="http://processingjs.com/">Processing.js</a> engine.</p>
+    <p>Various examples using the <a href="http://processingjs.com/">Processing.js</a> programming language.</p>
+    
+    <div class="column">
     <h4>Basics</h4>
     <ul>
+<!--
       <li><a href="processing/CreateGraphics.html">CreateGraphics</a></li>
+-->
       <li><a href="processing/Recursion.html">Recursion</a></li>
       <li><a href="processing/Distance2D.html">Distance2D</a></li>
       <li><a href="processing/Arctangent.html">Arctangent</a></li>
       <li><a href="processing/Random.html">Random</a></li>
       <li><a href="processing/NoiseWave.html">NoiseWave</a></li>
+<!--
       <li><a href="processing/Pointillism.html">Pointillism</a></li>
       <li><a href="processing/CreateImage.html">CreateImage</a></li>
+-->
       <li><a href="processing/Mouse2D.html">Mouse2D</a></li>
       <li><a href="processing/BezierEllipse.html">BezierEllipse</a></li>
       <li><a href="processing/StoringInput.html">StoringInput</a></li>
@@ -72,19 +171,34 @@ font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
       <li><a href="processing/KeyboardFunctions.html">KeyboardFunctions</a></li>
       <li><a href="processing/Clock.html">Clock</a></li>
     </ul>
+    
+    <h4>Special</h4>
+    <ul>
+      <li><a href="processing/MoltenBar.html">MoltenBar</a></li>
+<!--
+      <li><a href="processing/Substrate.html">Substrate</a></li>
+      <li><a href="processing/Snake.html">Snake</a></li>
+-->
+    </ul>
+    </div>
 
+    <div class="column">
     <h4>Topics</h4>
     <ul>
       <li><a href="processing/Handles.html">Handles</a></li>
       <li><a href="processing/Wolfram.html">Wolfram</a></li>
       <li><a href="processing/Conway.html">Conway</a></li>
+<!--
       <li><a href="processing/Animator.html">Animator</a></li>
+-->
       <li><a href="processing/Pattern.html">Pattern</a></li>
+<!--
       <li><a href="processing/PixelArray.html">PixelArray</a></li>
       <li><a href="processing/Brightness.html">Brightness</a></li>
       <li><a href="processing/LinearImage.html">LinearImage</a></li>
       <li><a href="processing/Scrollbar.html">Scrollbar</a></li>
       <li><a href="processing/Histogram.html">Histogram</a></li>
+-->
       <li><a href="processing/BouncyBubbles.html">BouncyBubbles</a></li>
       <li><a href="processing/Collision.html">Collision</a></li>
       <li><a href="processing/Reflection1.html">Reflection1</a></li>
@@ -92,22 +206,28 @@ font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
       <li><a href="processing/Spring.html">Spring</a></li>
       <li><a href="processing/Springs.html">Springs</a></li>
       <li><a href="processing/Reach3.html">Reach3</a></li>
+<!--
       <li><a href="processing/SimpleParticleSystem.html">SimpleParticleSystem</a></li>
       <li><a href="processing/Flocking.html">Flocking</a></li>
+-->
       <li><a href="processing/Koch.html">Koch</a></li>
+<!--
       <li><a href="processing/Mandelbrot.html">Mandelbrot</a></li>
+-->
       <li><a href="processing/Tree.html">Tree</a></li>
       <li><a href="processing/SoftBody.html">SoftBody</a></li>
     </ul>
-	
-    <h4>Special</h4>
-    <ul>
-      <li><a href="processing/MoltenBar.html">MoltenBar</a></li>
-      <li><a href="processing/Substrate.html">Substrate</a></li>
-      <li><a href="processing/Snake.html">Snake</a></li>
-    </ul>
+    </div>
+    </div>
     
+    <div class="testgroup">
     <h3 id="tests-text">Text Demo</h3>
-    <p><strong><a href="text/textposition.html">Canvas Text Demo</a></strong>. Example leveraged from the Canvas-Text project.</p>
+    <p><strong><a href="text/textposition.html">Canvas Text Demo</a></strong>. Example courtesy the <a href="http://code.google.com/p/canvas-text/">Canvas-Text project</a>.</p>
+    </div>
+    
+    <h2>Credits</h2>
+    <p>Thanks goes out to Colin Leung of <a href="http://gamemeal.com">gamemeal</a> for his work on the <a href="http://code.google.com/p/ascanvas/">ascanvas</a> API for Flash. Inspiration provided by <a href="http://gxjones.blogspot.com/">Grant Jones</a> for his original <a href="http://gxjones.blogspot.com/2008/07/flashcanvas.html">FlashCanvas</a> implementation.</p>
+    <p>FlashCanvas is copyright &copy; 2009 Tim Cameron Ryan and is provided under the MIT/X License.</p>
+    </div>
   </body>
 </html>

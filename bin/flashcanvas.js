@@ -6,9 +6,9 @@
  *
  */
 
-// http://www.whatwg.org/specs/web-apps/current-work/#the-canvas-element
-// http://dev.w3.org/html5/spec/the-canvas-element.html
-// http://philip.html5.org/tests/canvas/suite/tests/
+// Reference:
+//   http://www.whatwg.org/specs/web-apps/current-work/#the-canvas-element
+//   http://dev.w3.org/html5/spec/the-canvas-element.html
 
 (function () {
 
@@ -42,17 +42,17 @@ Structure.extend = function (p, s) {
 				obj[prop] = props[prop];
 	
 		// IE has dontEnum issues
-/*@cc_on	var prop, enums = 'constructor|toString|valueOf|toLocaleString|isPrototypeOf|propertyIsEnumerable|hasOwnProperty'.split('|');
+		var prop, enums = 'constructor|toString|valueOf|toLocaleString|isPrototypeOf|propertyIsEnumerable|hasOwnProperty'.split('|');
 		while (prop = enums.pop())
 			if (OP.hasOwnProperty.call(props, prop) && !OP.propertyIsEnumerable.call(props, prop))
-				obj[prop] = props[prop]; @*/
+				obj[prop] = props[prop];
 	}
 	
 	// clean input
 	var props = p || {}, statics = s || {};
 	// create factory object
 	var ancestor = this, Factory = OP.hasOwnProperty.call(props, 'constructor') ?
-	    props.constructor : function () { ancestor.apply(this, arguments); }
+	    props.constructor : function () { ancestor.apply(this, arguments); };
 	
 	// copy and extend statics
 	augment(Factory, Structure);
@@ -139,21 +139,21 @@ var CanvasRenderingContext2D = Structure.extend(
 	save: function () {
 		// push states
 		this._stateStack.push({
-			strokeStyle: this._strokeStyle,
-			fillStyle: this._fillStyle,
-			globalAlpha: this._globalAlpha,
-			lineWidth: this._lineWidth,
-			lineCap: this._lineCap,
-			lineJoin: this._lineJoin,
-			miterLimit: this._miterLimit,
-			shadowOffsetX: this._shadowOffsetX,
-			shadowOffsetY: this._shadowOffsetY,
-			shadowColor: this._shadowColor,
-			shadowBlur: this._shadowBlur,
-			globalCompositeOperation: this._globalCompositeOperation,
-			font: this._font,
-			textAlign: this._textAlign,
-			textBaseline: this._textBaseline
+			strokeStyle: this.strokeStyle,
+			fillStyle: this.fillStyle,
+			globalAlpha: this.globalAlpha,
+			lineWidth: this.lineWidth,
+			lineCap: this.lineCap,
+			lineJoin: this.lineJoin,
+			miterLimit: this.miterLimit,
+			shadowOffsetX: this.shadowOffsetX,
+			shadowOffsetY: this.shadowOffsetY,
+			shadowColor: this.shadowColor,
+			shadowBlur: this.shadowBlur,
+			globalCompositeOperation: this.globalCompositeOperation,
+			font: this.font,
+			textAlign: this.textAlign,
+			textBaseline: this.textBaseline
 		});
 	
 		// write all properties
@@ -173,21 +173,21 @@ var CanvasRenderingContext2D = Structure.extend(
 		if (this._stateStack.length > 0)
 		{
 			var state = this._stateStack.pop();
-			this._strokeStyle = state.strokeStyle;
-			this._fillStyle = state.fillStyle;
-			this._globalAlpha = state.globalAlpha;
-			this._lineWidth = state.lineWidth;
-			this._lineCap = state.lineCap;
-			this._lineJoin = state.lineJoin;
-			this._miterLimit = state.miterLimit;
-			this._shadowOffsetX = state.shadowOffsetX;
-			this._shadowOffsetY = state.shadowOffsetY;
-			this._shadowColor = state.shadowColor;
-			this._shadowBlur = state.shadowBlur;
-			this._globalCompositeOperation = state.globalCompositeOperation;
-			this._font = state.font;
-			this._textAlign = state.textAlign;
-			this._textBaseline = state.textBaseline;
+			this.strokeStyle = state.strokeStyle;
+			this.fillStyle = state.fillStyle;
+			this.globalAlpha = state.globalAlpha;
+			this.lineWidth = state.lineWidth;
+			this.lineCap = state.lineCap;
+			this.lineJoin = state.lineJoin;
+			this.miterLimit = state.miterLimit;
+			this.shadowOffsetX = state.shadowOffsetX;
+			this.shadowOffsetY = state.shadowOffsetY;
+			this.shadowColor = state.shadowColor;
+			this.shadowBlur = state.shadowBlur;
+			this.globalCompositeOperation = state.globalCompositeOperation;
+			this.font = state.font;
+			this.textAlign = state.textAlign;
+			this.textBaseline = state.textBaseline;
 		}
 	
 		var b = this._buffer;
@@ -395,7 +395,7 @@ var CanvasRenderingContext2D = Structure.extend(
 		
 		this._writeCompositing();
 		this._writeShadows();
-		this._writeColorStyles()
+		this._writeColorStyles();
 		
 		var b = this._buffer;
 		b.writeByte(properties.fillRect);
@@ -675,6 +675,12 @@ var CanvasRenderingContext2D = Structure.extend(
 				ctx._resize(size.width, size.height);
 			}
 		});
+		
+		// forward flash events to parent
+		swf.attachEvent('onfocus', function () {
+			swf.blur();
+			canvas.focus();
+		});
 	}
 });
 
@@ -775,42 +781,51 @@ BytesBuffer = Structure.extend(
 		{*/
 			// computed
 			var abs = x;
-			var a=0, b=0, c=0;
+			var a=0, b=0, c=0, d=0;
 			
 			// sign
 			if (x < 0) {
-				c = 128;
+				d = 128;
 				abs = Math.abs(x);
 			}
 			
 			// exponent
 			var exponent = Math.floor(Math.log(abs) / Math.log(2)), expEncoded = exponent + 127;
-			c |= (expEncoded & 254) >> 1;
-			b = (expEncoded & 1) << 7;
+			d |= (expEncoded & 254) >> 1;
+			c = (expEncoded & 1) << 7;
 			
 			// mantissa
-			var mantissa = (abs / (1 << exponent)) - 1, k = mantissa;		
-			if ((k -= 1/2) >= 0) 		{ b |= 64; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/4) >= 0) 		{ b |= 32; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/8) >= 0) 		{ b |= 16; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/16) >= 0) 		{ b |= 8; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/32) >= 0) 		{ b |= 4; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/64) >= 0) 		{ b |= 2; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/128) >= 0) 	{ b |= 1; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/256) >= 0) 	{ a |= 128; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/512) >= 0) 	{ a |= 64; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/1024) >= 0)	{ a |= 32; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/2048) >= 0) 	{ a |= 16; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/4096) >= 0) 	{ a |= 8; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/8192) >= 0) 	{ a |= 4; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/16384) >= 0)	{ a |= 2; mantissa = k; } else { k = mantissa; }
-			if ((k -= 1/32768) >= 0) 	{ a |= 1; mantissa = k; } else { k = mantissa; }
+			var mantissa = (abs / Math.pow(2, exponent)) - 1, k = mantissa;
+			
+			if ((k -= 1/2) >= 0) 		{ c |= 64; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/4) >= 0) 		{ c |= 32; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/8) >= 0) 		{ c |= 16; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/16) >= 0) 		{ c |= 8; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/32) >= 0) 		{ c |= 4; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/64) >= 0) 		{ c |= 2; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/128) >= 0) 	{ c |= 1; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/256) >= 0) 	{ b |= 128; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/512) >= 0) 	{ b |= 64; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/1024) >= 0)	{ b |= 32; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/2048) >= 0) 	{ b |= 16; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/4096) >= 0) 	{ b |= 8; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/8192) >= 0) 	{ b |= 4; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/16384) >= 0)	{ b |= 2; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/32768) >= 0) 	{ b |= 1; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/65536) >= 0) 	{ a |= 128; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/131072) >= 0) 	{ a |= 64; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/262144) >= 0)	{ a |= 32; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/524288) >= 0) 	{ a |= 16; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/1048576) >= 0) 	{ a |= 8; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/2097152) >= 0) 	{ a |= 4; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/4194304) >= 0)	{ a |= 2; mantissa = k; } else { k = mantissa; }
+			if ((k -= 1/8388608) >= 0) 	{ a |= 1; mantissa = k; } else { k = mantissa; }			
 				
 			// write bytes
-			bytes[this.len++] = 0;
 			bytes[this.len++] = a;
 			bytes[this.len++] = b;
 			bytes[this.len++] = c;
+			bytes[this.len++] = d;
 //		}
 	},
 	
@@ -862,7 +877,7 @@ var DOMUtils = {
 	
 		for (var e = null; e = DOMUtils._loadEvents.shift(); )
 			e();
-		DOMUtils.addLoadEvent = function (e) { e(); }
+		DOMUtils.addLoadEvent = function (e) { e(); };
 	},
 	addLoadEvent: function (e) {
 		DOMUtils._loadEvents.push(e);
@@ -962,7 +977,7 @@ var SWFUtils = {
 			return "<null/>"; //???
 		}
 	}
-}
+};
 
 /*
  * initialization
@@ -981,7 +996,7 @@ document.createElement = function (name) {
 	if (name.toLowerCase() == 'canvas')
 		CanvasRenderingContext2D.initCanvasElement(element);
 	return element;
-}
+};
 
 // initialize canvas elements in markup
 DOMUtils.addLoadEvent(function () {
