@@ -3,9 +3,9 @@
 <html>
   <head>
     <title>NoiseWave 
- &sect; Processing.js</title>
+ | Processing.js</title>
 
-    <!--[if IE]><script type="text/javascript" src="/FlashCanvas/bin/flashcanvas.js"></script><![endif]-->
+    <!--[if IE]><script type="text/javascript" src="../bin/flashcanvas.js"></script><![endif]-->
     <script type="text/javascript" src="processing.js"></script>
     <script type="text/javascript" src="loader.js"></script>
   </head>
@@ -49,6 +49,7 @@ void calcWave() {
     // Using 2D noise function
     //yvalues[i] = (2*noise(xoff,yoff)-1)*amplitude; // Option #1
     // Using 1D noise function
+    
     yvalues[i] = (2*noise(xoff)-1)*amplitude;    // Option #2
     xoff+=dx;
   }
