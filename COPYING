@@ -1,0 +1,67 @@
+canvas.swf
+==========
+
+canvas.swf is a fork of FlashCanvas by the FlashCanvas project. It is
+released under the MIT license, but contains code derived from other projects.
+These projects and their licenses are listed below.
+
+Predecessor projects
+--------------------
+
+ * The first prototype of FlashCanvas by Grant Jones
+   http://gxjones.blogspot.com/2008/07/flashcanvas.html
+   Apache License 2.0
+
+ * ASCanvas by Colin Leung
+   http://code.google.com/p/ascanvas/
+   CC0 / Public domain
+
+ * FlashCanvas by the FlashCanvas Project
+   http://code.google.com/p/flashcanvas/
+   MIT License
+
+
+Third-party libraries used in canvas.swf
+-----------------------------------------
+
+ * bezier_lib.as by Timothée Groleau
+   http://www.timotheegroleau.com/Flash/articles/cubic_bezier_in_flash.htm
+
+ * JavaScript implementation of arcTo() by MindCat
+   http://d.hatena.ne.jp/mindcat/20100131/1264958828
+   Public domain
+
+ * BitString.as, JPGEncoder.as and PNGEncoder.as by Adobe Systems Incorporated
+   https://github.com/mikechambers/as3corelib
+   New BSD License
+
+
+Examples included in this package
+---------------------------------
+
+This package includes examples from the following pages. The examples
+are modified to include canvas.swf as a fallback for Internet Explorer 6-8.
+
+ * ExplorerCanvas
+   http://code.google.com/p/explorercanvas/
+   Apache License 2.0
+
+ * Canvas text
+   http://code.google.com/p/canvas-text/
+   MIT License
+
+ * Canvas tutorial - Mozilla Developer Center
+   https://developer.mozilla.org/en/Canvas_tutorial
+   MIT License
+
+ * Kaleidoscope by Christophe Résigné
+   http://www.chiptune.com/kaleidoscope/
+   (Included with the permission of the author)
+
+ * Starfield by Christophe Résigné
+   http://www.chiptune.com/starfield/starfield.html
+   (Included with the permission of the author)
+
+ * Cloth Simulation by Andrew Hoyer
+   http://www.andrew-hoyer.com/experiments/cloth
+   (Included with the permission of the author)
